@@ -33,3 +33,13 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+.env
+coverage
+coverage.json
+typechain
+typechain-types
+
+#Hardhat files
+cache
+artifacts
