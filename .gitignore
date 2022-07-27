@@ -37,8 +37,7 @@ yarn-error.log*
 .env
 coverage
 coverage.json
-typechain
-typechain-types
+typings
 
 #Hardhat files
 cache

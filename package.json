@@ -3,11 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "postinstall":"npm run contracts:compile",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "lint:fix": "eslint --fix .",
+    "contracts:test": "hardhat test --no-compile",
     "contracts:compile": "hardhat compile",
     "contracts:typings": "hardhat typechain",
     "contracts:clean": "hardhat clean"
@@ -36,11 +38,14 @@
     "chai": "^4.3.6",
     "eslint": "8.20.0",
     "eslint-config-next": "12.2.3",
+    "ethereum-waffle": "^3.4.4",
     "ethers": "^5.6.9",
     "hardhat": "^2.10.1",
     "hardhat-gas-reporter": "^1.0.8",
     "solidity-coverage": "^0.7.21",
+    "ts-mocha": "^10.0.0",
     "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.0.0",
     "typechain": "^8.1.0",
     "typescript": "^4.7.4"
   }
