@@ -26,6 +26,11 @@
   --background-opacity: 0.4;
 }
 
+body,
+body * {
+  cursor: none !important;
+}
+
 body {
   color: rgb(var(--foreground-rgb));
   background-color: rgb(var(--background-color));
