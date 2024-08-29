@@ -1,8 +1,12 @@
 import { useEffect, useRef } from 'react'
 
-import { Cursor, HandCursor, HandClickCursor } from '@/components'
+import { Cursor, HandCursor, HandClickCursor, TextCursor } from '@/components'
 
 /**
+ * @author Qwerty <qwerty@qwerty.xyz>
+ *
+ * @returns `JSX.Element` - cursors container
+ *
  * Move a container with svgs to current mouse position to simulate custom cursors.
  *
  * Note: Cursors must have correct size and be aligned to the tip of the actual cursor, including correct rotation.
@@ -17,7 +21,7 @@ export function useCursor() {
   /* Position the container on "mousemove" event. */
 
   useEffect(() => {
-    let activeCursor: 0 | 1 | 2 = 0
+    let activeCursor: 0 | 1 | 2 | 3 = 0
 
     const listener = (event: MouseEvent) => {
       const { x, y } = { x: event.clientX, y: event.clientY }
@@ -26,6 +30,7 @@ export function useCursor() {
 
       if (path.some((item) => (item as HTMLElement).classList?.contains('cursor-pointer'))) activeCursor = 1
       else if (path.some((item) => (item as HTMLElement).classList?.contains('cursor-click'))) activeCursor = 2
+      else if (path.some((item) => (item as HTMLElement).classList?.contains('cursor-text'))) activeCursor = 3
       else activeCursor = 0
 
       if (cursorsContainer.current) {
@@ -60,6 +65,7 @@ export function useCursor() {
       <Cursor id='cursorArrow' className='pointer-events-none absolute hidden size-5 group-data-[cursor=0]:block' />
       <HandCursor id='cursorHand' className='pointer-events-none absolute -left-1.5 -top-2 hidden size-7 -rotate-90 group-data-[cursor=1]:block' />
       <HandClickCursor id='cursorHandClick' className='pointer-events-none absolute -left-1.5 -top-2 hidden size-7 -rotate-90 group-data-[cursor=2]:block' />
+      <TextCursor id='cursorText' className='pointer-events-none absolute -left-1.5 -top-2 hidden size-7 group-data-[cursor=3]:block' />
     </div>
   )
 }
