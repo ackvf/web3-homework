@@ -16,8 +16,5 @@
   "tabWidth": 2,
   "useTabs": false,
   "overrides": [],
-    "plugins": [
-      "prettier-plugin-tailwindcss"
-    ]
-
+  "plugins": ["prettier-plugin-tailwindcss"]
 }

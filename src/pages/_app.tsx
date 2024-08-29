@@ -7,14 +7,11 @@ const inter = Inter({ subsets: ['latin'] })
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <main
-      id="RootElement"
-      className={`${inter.className} flex flex-col h-screen`}
-    >
+    <main id='RootElement' className={`${inter.className} flex h-screen flex-col`}>
       <Head>
         <title>Exodus wallet by Qwerty</title>
-        <meta name="description" content="Exodus wallet by Qwerty." />
-        <link rel="icon" href="/favicon.png" />
+        <meta name='description' content='Exodus wallet by Qwerty.' />
+        <link rel='icon' href='/favicon.png' />
       </Head>
       <Component {...pageProps} />
     </main>
