@@ -4,11 +4,14 @@ import type { AppProps } from 'next/app'
 import { Inter } from 'next/font/google'
 import Head from 'next/head'
 
+import { useCursor } from '@/hooks'
 import { Navigation } from '@/components'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function App({ Component, pageProps }: AppProps) {
+  const cursors = useCursor()
+
   useLayoutEffect(() => {
     document.getElementById('RootElement')?.classList.add('bg' + (((Math.random() * 7) | 0) + 1))
   }, [])
@@ -21,6 +24,9 @@ export default function App({ Component, pageProps }: AppProps) {
         <link rel='icon' href='/favicon.png' />
       </Head>
       <Navigation />
+
+      {cursors}
+
       <Component {...pageProps} />
     </main>
   )

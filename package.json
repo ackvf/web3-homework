@@ -13,8 +13,8 @@
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
-    "format": "prettier --check --ignore-path .gitignore .",
-    "format:fix": "prettier --write --ignore-path .gitignore .",
+    "format": "prettier --check --ignore-path .gitignore --ignore-path .prettierignore .",
+    "format:fix": "pnpm format --write",
     "fix": "pnpm format:fix && pnpm lint:fix",
     "types": "tsc --noEmit --incremental",
     "types:watch": "tsc --noEmit --incremental --watch"
