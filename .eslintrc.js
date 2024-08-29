@@ -1,6 +1,16 @@
 module.exports = {
+  root: true,
   extends: ['next', 'next/core-web-vitals', 'prettier'],
   plugins: ['@typescript-eslint'],
+  settings: {
+    next: {
+      rootDir: '.',
+    },
+  },
+  parserOptions: {
+    project: ['tsconfig.json'],
+  },
+  ignorePatterns: ['.eslintrc.js'],
   rules: {
     'comma-dangle': ['error', 'always-multiline'],
     'no-shadow': 'warn',
