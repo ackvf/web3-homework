@@ -64,7 +64,7 @@ module.exports = {
         ],
       },
     ],
-    quotes: ['error', 'single'],
+    quotes: ['error', 'single', { avoidEscape: true }],
     'react-hooks/exhaustive-deps': 'error',
     'react/no-unescaped-entities': 'off',
   },

@@ -9,10 +9,10 @@ import { Input } from '@/components/Atoms/Input'
 
 // https://next-auth.js.org/getting-started/client#signin
 
-export default function SignUp() {
+export default function SignIn() {
   const { data: session } = useSession()
 
-  const [formState, { onInputChange }, , refState] = useFormState<SignUpFormState>(EMPTY_FORM_STATE)
+  const [formState, { onInputChange }, , refState] = useFormState<SignInFormState>(EMPTY_FORM_STATE)
 
   const [isLocked, , lock, unlock] = useToggle()
 
@@ -23,24 +23,18 @@ export default function SignUp() {
       const formData = refState.current
 
       if (isLocked) return
-      if (formData.email === '' || formData.password === '' || formData.name === '') return
+      if (formData.email === '' || formData.password === '') return
 
       lock()
 
       try {
         const exists = await UserService.exists(formData)
 
-        if (exists) {
-          alert('User already exists')
+        if (!exists) {
+          alert("User doesn't exists")
           unlock()
           return
         }
-
-        await fetch('/api/user/new', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formData),
-        }).then((res) => res.json())
 
         await signIn('email-password', {
           ...formData,
@@ -83,24 +77,17 @@ export default function SignUp() {
     <main id='MainContentWrap' className='flex-grow pt-8'>
       <Block id='SignUpForm'>
         <div className='light:text-light-500 md:leading-2xl text-stone-500 md:text-2xl'>
-          Enter your details to sign up
+          Enter your details to log in
         </div>
         <form className='mt-8 flex flex-col gap-8' onSubmit={handleSubmit}>
-          <Input<SignUpFormState>
-            label='Name'
-            placeholder='e.g. "John Doe"'
-            name='name'
-            onChange={onInputChange}
-            value={formState.name}
-          />
-          <Input<SignUpFormState>
+          <Input<SignInFormState>
             label='Email'
             placeholder='e.g. "qwerty@exodus.com"'
             name='email'
             onChange={onInputChange}
             value={formState.email}
           />
-          <Input<SignUpFormState>
+          <Input<SignInFormState>
             label='Password'
             placeholder='password'
             name='password'
@@ -113,7 +100,7 @@ export default function SignUp() {
               type='submit'
               className='mx-auto block h-14 w-60 cursor-pointer justify-center rounded-md border border-stone-600 bg-stone-200 px-4 text-stone-900 transition-colors duration-500 hover:bg-stone-400'
             >
-              <span className='text-base font-normal uppercase'>REGISTER</span>
+              <span className='text-base font-normal uppercase'>LOGIN</span>
             </button>
             {/* <Button disabled={isLocked || !isFormValid} loading={isLocked} label='Save' type='submit' fullWidth /> */}
           </div>
@@ -123,14 +110,12 @@ export default function SignUp() {
   )
 }
 
-interface SignUpFormState extends UserFormPayload {
-  name: string
+interface SignInFormState extends Pick<UserFormPayload, 'email' | 'password'> {
   email: string
   password: string
 }
 
-const EMPTY_FORM_STATE: SignUpFormState = {
-  name: '',
+const EMPTY_FORM_STATE: SignInFormState = {
   email: '',
   password: '',
 }

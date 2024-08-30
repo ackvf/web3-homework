@@ -1,20 +1,28 @@
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { signOut, useSession } from 'next-auth/react'
 
 import { ArrowIcon } from '../Atoms'
 
-const navigation = {
-  Button: [
-    { title: 'Option 1', description: 'Description 1.', link: '' },
-    { title: 'Option 2', description: 'Description 2.', link: '' },
-    { title: 'Option 3', description: 'Description 3.', link: '' },
-  ],
-  'Sign up': [{ title: 'Email', description: 'Sign up with email.', link: '/signup' }],
-}
-
 export const Navigation: React.FC = () => {
+  const { data: session } = useSession()
+
   const selected = false
+
+  const navigation = {
+    Button: [
+      { title: 'Option 1', description: 'Description 1.', link: '' },
+      { title: 'Option 2', description: 'Description 2.', link: '' },
+      { title: 'Option 3', description: 'Description 3.', link: '' },
+    ],
+    ...((!session || !session.user) && {
+      'Sign in / up': [
+        { title: 'Sign in', description: 'Sign in with email.', link: '/signin' },
+        { title: 'Sign up', description: 'Create new account with email.', link: '/signup' },
+      ],
+    }),
+  }
 
   return (
     <nav
@@ -22,7 +30,7 @@ export const Navigation: React.FC = () => {
       className='relative h-28'
       style={{
         background: 'rgba(0, 0, 0, 0.17)',
-        backdropFilter: 'blur(5px)', // TODO calculate
+        backdropFilter: 'blur(5px)',
       }}
     >
       <div className='relative z-20 flex h-28 w-full items-center justify-between px-6'>
@@ -55,6 +63,16 @@ export const Navigation: React.FC = () => {
           {Object.entries(navigation).map(([title, options]) => (
             <MenuButton key={`${title}`} selected={selected} title={title} subMenuOptions={options} />
           ))}
+          {session && session.user && (
+            <div id='MenuButton' onClick={() => signOut()}>
+              <div
+                className='cursor-click flex h-[48px] w-[128px] items-center justify-center rounded-sm text-base font-extralight transition-colors duration-500 hover:!bg-stone-700 group-hover:bg-stone-900 selected:bg-stone-700'
+                data-selected={selected}
+              >
+                Sign Out
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </nav>
@@ -68,17 +86,17 @@ interface MenuButtonProps {
 }
 
 export const MenuButton: React.FC<MenuButtonProps> = ({ selected, title, subMenuOptions }) => (
-  <div className='group'>
+  <div id='MenuButton' className='group'>
     <div
       className='flex h-[48px] w-[128px] cursor-pointer items-center justify-center rounded-sm text-base font-extralight transition-colors duration-500 hover:!bg-stone-700 group-hover:bg-stone-900 selected:bg-stone-700'
       data-selected={selected}
     >
       {title}
     </div>
-    <div className='absolute left-0 hidden w-full pt-4 group-hover:block'>
+    <div id='ChildMenuContainer' className='absolute left-0 hidden w-full min-w-80 pt-4 group-hover:block'>
       <div className='rounded-md border border-stone-700 bg-stone-900 shadow-lg'>
         {subMenuOptions.map((props) => (
-          <SubMenu key={`${props.title}`} selected={selected} {...props} />
+          <ChildMenu key={`${props.title}`} selected={selected} {...props} />
         ))}
       </div>
     </div>
@@ -92,9 +110,9 @@ interface SubMenuProps {
   link: string
 }
 
-export const SubMenu: React.FC<SubMenuProps> = ({ selected, title, description, link }) => (
+export const ChildMenu: React.FC<SubMenuProps> = ({ selected, title, description, link }) => (
   <Link
-    id='NavChildMenu'
+    id='ChildMenu'
     href={link}
     data-selected={selected}
     type='button'

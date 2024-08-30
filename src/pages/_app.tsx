@@ -3,13 +3,14 @@ import { useLayoutEffect } from 'react'
 import type { AppProps } from 'next/app'
 import { Inter } from 'next/font/google'
 import Head from 'next/head'
+import { SessionProvider } from 'next-auth/react'
 
 import { useCursor } from '@/hooks'
 import { Navigation } from '@/components'
 
 const inter = Inter({ subsets: ['latin'] })
 
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   const cursors = useCursor()
 
   useLayoutEffect(() => {
@@ -17,17 +18,19 @@ export default function App({ Component, pageProps }: AppProps) {
   }, [])
 
   return (
-    <main id='RootElement' className={`${inter.className} flex h-screen flex-col`}>
-      <Head>
-        <title>Exodus wallet by Qwerty</title>
-        <meta name='description' content='Exodus wallet by Qwerty.' />
-        <link rel='icon' href='/favicon.png' />
-      </Head>
-      <Navigation />
+    <SessionProvider session={session}>
+      <main id='RootElement' className={`${inter.className} flex h-screen flex-col`}>
+        <Head>
+          <title>Exodus wallet by Qwerty</title>
+          <meta name='description' content='Exodus wallet by Qwerty.' />
+          <link rel='icon' href='/favicon.png' />
+        </Head>
+        <Navigation />
 
-      {cursors}
+        {cursors}
 
-      <Component {...pageProps} />
-    </main>
+        <Component {...pageProps} />
+      </main>
+    </SessionProvider>
   )
 }

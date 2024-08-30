@@ -1,7 +1,6 @@
-
 import { type NextApiRequest, type NextApiResponse } from 'next'
 
-import { ping } from '@/redis'
+import { ping } from '@/services/redis'
 
 /**
  * Test the connection to the Redis database.

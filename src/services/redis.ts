@@ -1,6 +1,6 @@
 import { kv } from '@vercel/kv'
 
-import { sleepResolve, str2hash } from './utils'
+import { sleepResolve, str2hash } from '../utils'
 
 /**
  * @author Qwerty <qwerty@qwerty.xyz>
@@ -42,7 +42,6 @@ import { sleepResolve, str2hash } from './utils'
  * - `SREM key fid1 [fid2 ...]` to remove user's fid from a set
  */
 
-
 /** As stored in the db. */
 export interface RedisRawUser {
   name: string
@@ -52,7 +51,7 @@ export interface RedisRawUser {
 }
 
 /** Data returned from the query after removing sensitive fields. */
-export interface RedisUser extends Omit<RedisRawUser, 'password'>{
+export interface RedisUser extends Omit<RedisRawUser, 'password'> {
   name: string
   email: string
 }
@@ -90,35 +89,42 @@ export async function ping(message?: string): Promise<string> {
  *    - `HSET hash:user:jsmith@example.com email <..> name <..> password <..>`
  */
 export async function add({ email, name, password }: UserFormPayload) {
-  const hash = kv.hset(hashKey({ email }), {
+  const hset = kv.hset(hashKey({ email }), {
     email,
     name,
     password: str2hash(password),
   } satisfies RedisRawUser)
-  return Promise.allSettled([hash])
+  return Promise.allSettled([hset])
 }
 
 /**
- * Reads a User record from the database.
+ * Reads a User record from the database, removing sensitive fields.
  */
-export async function get({ email }: UserFormPayload): Promise<RedisUser | null> {
+export async function get({ email }: Pick<UserFormPayload, 'email'>): Promise<RedisUser | null> {
   //@ts-expect-error https://github.com/upstash/upstash-redis/issues/886
-  const {password, ...data} = await kv.hgetall<RedisRawUser>(hashKey({ email }))
-  return data
+  const record = await kv.hgetall<RedisRawUser>(hashKey({ email }))
+  if (record) {
+    const { password, ...data } = record
+    return data
+  }
+  return null
 }
 
 /**
  * Verifies a Form password with the hashed password in database.
  */
-export async function verifyPassword({ email, password }: UserFormPayload): Promise<boolean> {
-  await sleepResolve(Math.random() * 100)
-  return await kv.hget<RedisRawUser['password']>(hashKey({ email }), 'password') === str2hash(password)
+export async function verifyPassword({
+  email,
+  password,
+}: Pick<UserFormPayload, 'email' | 'password'>): Promise<boolean> {
+  await sleepResolve(Math.random() * 500)
+  return (await kv.hget<RedisRawUser['password']>(hashKey({ email }), 'password')) === str2hash(password)
 }
 
 /**
  * Removes a User record from the database.
  */
-export async function remove({ email }: UserFormPayload) {
-  const hash = kv.del(hashKey({ email }))
-  return Promise.allSettled([hash])
+export async function remove({ email }: Pick<UserFormPayload, 'email'>) {
+  const hset = kv.del(hashKey({ email }))
+  return Promise.allSettled([hset])
 }
