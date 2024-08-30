@@ -48,31 +48,46 @@ export interface RedisRawUser {
   email: string
   /** A hashed password */
   password: number
+  /** BTC address (custodial) */
+  address: string
+}
+
+/** As stored in the db. */
+export interface RedisRawPkey {
+  address: string
+  pkey: string
 }
 
 /** Data returned from the query after removing sensitive fields. */
 export interface RedisUser extends Omit<RedisRawUser, 'password'> {
   name: string
   email: string
+  address: string
 }
 
 /** Submitted from the form. */
-export interface UserFormPayload extends RedisUser {
+export interface UserFormPayload extends Omit<RedisUser, 'address'> {
   password: string
 }
 
+/** Generated on the server, for the server. */
+export interface SecretPayload {
+  address: string
+  pkey: string
+}
+
 /**
- * Used to generate consistent Hashmap keys for the database.
+ * Used to generate consistent Hashmap keys for User records in the database.
  */
-function hashKey({ email }: Pick<UserFormPayload, 'email'>) {
+function hashUserKey({ email }: Pick<UserFormPayload, 'email'>) {
   return `hash:user:${email}` as const
 }
 
 /**
- * Used to generate consistent Set keys for the database.
+ * Used to generate consistent Hashmap keys for storing custodial keys.
  */
-function setKey({ email }: Pick<UserFormPayload, 'email'>) {
-  return `set:user:${email}` as const
+function hashPkKey({ email }: Pick<UserFormPayload, 'email'>) {
+  return `hash:pkey:${email}` as const
 }
 
 /**
@@ -83,18 +98,22 @@ export async function ping(message?: string): Promise<string> {
 }
 
 /**
- * Adds a user record to the database.
+ * Adds a user record to the database as two entries.
  *
- * - Creates new User record as a hashmap. e.g.:
- *    - `HSET hash:user:jsmith@example.com email <..> name <..> password <..>`
+ * 1) Creates new User record as a hashmap, e.g.:
+ *    - `HSET hash:user:jsmith@example.com email <..> name <..> password <..> address <..>`
+ * 2) Stores custodial keys in a separate hashmap, e.g.:
+ *    - `HSET hash:pkey:jsmith@example.com address <..> pkey <..>`
  */
-export async function add({ email, name, password }: UserFormPayload) {
-  const hset = kv.hset(hashKey({ email }), {
+export async function add({ email, name, password, address, pkey }: UserFormPayload & SecretPayload) {
+  const pset = kv.hset(hashPkKey({ email }), { address, pkey })
+  const uset = kv.hset(hashUserKey({ email }), {
     email,
     name,
+    address,
     password: str2hash(password),
   } satisfies RedisRawUser)
-  return Promise.allSettled([hset])
+  return Promise.allSettled([pset, uset])
 }
 
 /**
@@ -102,12 +121,18 @@ export async function add({ email, name, password }: UserFormPayload) {
  */
 export async function get({ email }: Pick<UserFormPayload, 'email'>): Promise<RedisUser | null> {
   //@ts-expect-error https://github.com/upstash/upstash-redis/issues/886
-  const record = await kv.hgetall<RedisRawUser>(hashKey({ email }))
-  if (record) {
-    const { password, ...data } = record
-    return data
-  }
-  return null
+  const record = await kv.hgetall<RedisRawUser>(hashUserKey({ email }))
+  //@ts-expect-error
+  delete record?.password
+  return record
+}
+
+/**
+ * Reads private keys.
+ */
+export async function getPkey({ email }: Pick<UserFormPayload, 'email'>): Promise<RedisRawPkey | null> {
+  //@ts-expect-error https://github.com/upstash/upstash-redis/issues/886
+  return await kv.hgetall<RedisRawPkey>(hashPkKey({ email }))
 }
 
 /**
@@ -118,13 +143,14 @@ export async function verifyPassword({
   password,
 }: Pick<UserFormPayload, 'email' | 'password'>): Promise<boolean> {
   await sleepResolve(Math.random() * 500)
-  return (await kv.hget<RedisRawUser['password']>(hashKey({ email }), 'password')) === str2hash(password)
+  return (await kv.hget<RedisRawUser['password']>(hashUserKey({ email }), 'password')) === str2hash(password)
 }
 
 /**
- * Removes a User record from the database.
+ * Removes a User record and custodial keys from the database.
  */
 export async function remove({ email }: Pick<UserFormPayload, 'email'>) {
-  const hset = kv.del(hashKey({ email }))
-  return Promise.allSettled([hset])
+  const pdel = kv.del(hashPkKey({ email }))
+  const udel = kv.del(hashUserKey({ email }))
+  return Promise.allSettled([pdel, udel])
 }

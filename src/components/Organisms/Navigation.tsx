@@ -28,7 +28,7 @@ export const Navigation: React.FC = () => {
   return (
     <nav
       id='Navigation'
-      className='fixed h-28 w-full top-0'
+      className='fixed top-0 h-28 w-full'
       style={{
         background: 'rgba(0, 0, 0, 0.17)',
         backdropFilter: 'blur(5px)',
@@ -55,7 +55,7 @@ export const Navigation: React.FC = () => {
           id='ConnectButton'
           className='relative z-10 order-3 flex h-16 w-60 cursor-pointer items-center justify-between gap-6 rounded-md border border-stone-400 bg-transparent px-4 py-8 transition-colors duration-500 hover:bg-stone-700'
         >
-          <span className='text-base font-normal uppercase text-stone-300'>CONNECT WALLET</span>
+          <span className='text-base font-normal uppercase text-stone-300 line-through'>CONNECT WALLET</span>
           <span className='flex h-6 min-h-6 w-6 min-w-6 items-center justify-center'>
             <ArrowIcon />
           </span>
