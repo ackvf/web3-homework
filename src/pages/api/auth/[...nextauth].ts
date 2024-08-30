@@ -14,6 +14,7 @@ import { get, verifyPassword, type UserFormPayload } from '@/services/redis'
 */
 
 export const authOptions: AuthOptions = {
+  secret: process.env.NEXTAUTH_SECRET,
   // Configure one or more authentication providers
   providers: [
     CredentialsProvider({
