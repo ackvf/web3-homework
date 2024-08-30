@@ -31,7 +31,8 @@ export const authOptions: AuthOptions = {
           const isPasswordCorrect = await verifyPassword({ email: credentials.email, password: credentials.password })
 
           if (isPasswordCorrect) {
-            const user = get({ email: credentials.email })
+            const user = await get({ email: credentials.email })
+            console.debug('user', user)
             // Any object returned will be saved in `user` property of the JWT
             return user as any as User
           } else {
@@ -61,7 +62,10 @@ export const authOptions: AuthOptions = {
       ;(session as any).accessToken! = token.accessToken
       session.user!.email = token.email
       session.user!.name = token.name
-
+      ;(session.user as any).address = token.address
+      // // TODO the data are not there
+      // console.debug('token', token)
+      // console.debug('session', session)
       return session
     },
   },

@@ -13,6 +13,7 @@ export const Navigation: React.FC = () => {
   const selected = false
 
   const navigation = {
+    Bitcoin: [{ title: 'Purchase BTC', description: 'Purchase bitcoin with linked account', link: ROUTE.PURCHASE }],
     Plaid: [
       { title: 'Link', description: 'Link bank account with Plaid', link: ROUTE.PLAID_LINK },
       { title: 'Dashboard', description: 'View Balance', link: ROUTE.PLAID_DASHBOARD },
