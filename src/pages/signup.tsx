@@ -1,6 +1,7 @@
 import { useCallback } from 'react'
 
 import { useFormState, useToggle } from '@/hooks'
+import type { UserFormPayload } from '@/redis'
 import { sleepResolve } from '@/utils'
 import { Block } from '@/components'
 import { Input } from '@/components/Atoms/Input'
@@ -73,7 +74,7 @@ export default function SignUp() {
   )
 }
 
-interface SignUpFormState {
+interface SignUpFormState extends UserFormPayload {
   name: string
   email: string
   password: string
