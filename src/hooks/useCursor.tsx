@@ -61,7 +61,7 @@ export function useCursor() {
   }, [])
 
   return (
-    <div id='cursors' ref={cursorsContainer} data-cursor='' className='group pointer-events-none fixed'>
+    <div id='cursors' ref={cursorsContainer} data-cursor='' className='group pointer-events-none fixed z-[9999]'>
       <Cursor id='cursorArrow' className='pointer-events-none absolute hidden size-5 group-data-[cursor=0]:block' />
       <HandCursor id='cursorHand' className='pointer-events-none absolute -left-1.5 -top-2 hidden size-7 -rotate-90 group-data-[cursor=1]:block' />
       <HandClickCursor id='cursorHandClick' className='pointer-events-none absolute -left-1.5 -top-2 hidden size-7 -rotate-90 group-data-[cursor=2]:block' />

@@ -19,16 +19,14 @@ export default function App({ Component, pageProps: { session, ...pageProps } }:
 
   return (
     <SessionProvider session={session}>
-      <main id='RootElement' className={`${inter.className} flex h-screen flex-col`}>
+      {cursors}
+      <main id='RootElement' className={`${inter.className} flex h-screen flex-col pt-28`}>
         <Head>
           <title>Exodus wallet by Qwerty</title>
           <meta name='description' content='Exodus wallet by Qwerty.' />
           <link rel='icon' href='/favicon.png' />
         </Head>
         <Navigation />
-
-        {cursors}
-
         <Component {...pageProps} />
       </main>
     </SessionProvider>

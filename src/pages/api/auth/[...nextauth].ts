@@ -1,7 +1,8 @@
-import NextAuth, { getServerSession, type AuthOptions } from 'next-auth'
 import type { User } from 'next-auth'
+import NextAuth, { getServerSession, type AuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 
+import { ROUTE } from '@/routes'
 import { get, verifyPassword, type UserFormPayload } from '@/services/redis'
 
 /*
@@ -57,7 +58,7 @@ export const authOptions: AuthOptions = {
     },
     async session({ session, token, user }) {
       // Send properties to the client, like an access_token and user id from a provider.
-      (session as any).accessToken! = token.accessToken
+      ;(session as any).accessToken! = token.accessToken
       session.user!.email = token.email
       session.user!.name = token.name
 
@@ -65,9 +66,9 @@ export const authOptions: AuthOptions = {
     },
   },
   pages: {
-    signIn: '/signin',
-    signOut: '/',
-    newUser: '/signup',
+    signIn: ROUTE.SIGNIN,
+    signOut: ROUTE.HOME,
+    newUser: ROUTE.SIGNUP,
   },
 }
 

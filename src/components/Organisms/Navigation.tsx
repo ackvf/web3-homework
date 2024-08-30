@@ -3,6 +3,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { signOut, useSession } from 'next-auth/react'
 
+import { ROUTE } from '@/routes'
+
 import { ArrowIcon } from '../Atoms'
 
 export const Navigation: React.FC = () => {
@@ -11,15 +13,14 @@ export const Navigation: React.FC = () => {
   const selected = false
 
   const navigation = {
-    Button: [
-      { title: 'Option 1', description: 'Description 1.', link: '' },
-      { title: 'Option 2', description: 'Description 2.', link: '' },
-      { title: 'Option 3', description: 'Description 3.', link: '' },
+    Plaid: [
+      { title: 'Link', description: 'Link bank account with Plaid', link: ROUTE.PLAID_LINK },
+      { title: 'Dashboard', description: 'View Balance', link: ROUTE.PLAID_DASHBOARD },
     ],
     ...((!session || !session.user) && {
       'Sign in / up': [
-        { title: 'Sign in', description: 'Sign in with email.', link: '/signin' },
-        { title: 'Sign up', description: 'Create new account with email.', link: '/signup' },
+        { title: 'Sign in', description: 'Sign in with email.', link: ROUTE.SIGNIN },
+        { title: 'Sign up', description: 'Create new account with email.', link: ROUTE.SIGNUP },
       ],
     }),
   }
@@ -27,7 +28,7 @@ export const Navigation: React.FC = () => {
   return (
     <nav
       id='Navigation'
-      className='relative h-28'
+      className='fixed h-28 w-full top-0'
       style={{
         background: 'rgba(0, 0, 0, 0.17)',
         backdropFilter: 'blur(5px)',

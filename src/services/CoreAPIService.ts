@@ -1,4 +1,4 @@
-const API = 'api'
+const API = '/api'
 
 const headers = () => ({
   'Content-Type': 'application/json',

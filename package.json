@@ -21,10 +21,13 @@
   },
   "dependencies": {
     "@vercel/kv": "^2.0.0",
+    "iron-session": "^8.0.3",
     "next": "14.2.7",
     "next-auth": "^4.24.7",
+    "plaid": "^26.0.0",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-plaid-link": "^3.5.2"
   },
   "devDependencies": {
     "@types/node": "^20",
