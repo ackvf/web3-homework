@@ -60,7 +60,7 @@ This assignment is designed to test your React skills, Ethereum development expe
 ## **Submission Guidelines**
 
 1. **Code Repository:** Provide a link to your GitHub repository.
-   - Ensure the repository is public or add oscar@watr.org as a contributor.
+   - Ensure the repository is public or add ahmed@neo.co as a contributor.
    - Include a clear commit history.
 2. **Documentation:**
    - Include details in the README of your repository with:
@@ -93,5 +93,5 @@ This assignment is designed to test your React skills, Ethereum development expe
 - [TypeScript Documentation](https://www.typescriptlang.org/docs/)
 
 ---
-Reach out to oscar@watr.org with any questions.
+Reach out to ahmed@neo.co with any questions.
 Good luck, and happy coding!
