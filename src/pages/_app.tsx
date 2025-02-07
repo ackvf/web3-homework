@@ -1,4 +1,6 @@
 import { useLayoutEffect } from "react"
+import { RainbowKitProvider } from "@rainbow-me/rainbowkit"
+import "@rainbow-me/rainbowkit/styles.css"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import type { AppProps } from "next/app"
 import { Inter } from "next/font/google"
@@ -23,6 +25,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
+        <RainbowKitProvider>
       <Cursor />
       <main id="RootElement" className={`${inter.className} flex h-screen flex-col pt-28`}>
         <Head>
@@ -33,6 +36,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <Navigation />
         <Component {...pageProps} />
         </main >
+        </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>
   )

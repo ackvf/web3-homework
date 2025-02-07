@@ -24,6 +24,8 @@ export const Cursor: React.FC = () => {
 
 			const path = event.composedPath?.() ?? (event as MouseEvent & { path: Node[] }).path
 
+			if (!path.some((item) => (item as HTMLElement).id === "__next")) return
+
 			if (path.some((item) => (item as HTMLElement).classList?.contains("cursor-pointer"))) activeCursor = 1
 			else if (path.some((item) => (item as HTMLElement).classList?.contains("cursor-click"))) activeCursor = 2
 			else if (path.some((item) => (item as HTMLElement).classList?.contains("cursor-text"))) activeCursor = 3

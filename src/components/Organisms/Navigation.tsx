@@ -1,20 +1,21 @@
-import React from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
+import React from "react"
+import { ConnectButton } from "@rainbow-me/rainbowkit"
+import Image from "next/image"
+import Link from "next/link"
+import { useRouter } from "next/router"
 
-import { ROUTE } from '@/routes'
+import { ROUTE } from "@/routes"
 
-import { ArrowIcon } from '../Atoms'
-import { useRouter } from 'next/router'
+import { ArrowIcon } from "../Atoms"
 
 export const Navigation: React.FC = () => {
   const router = useRouter()
 
   const navigation = {
-    "SAFE": [{ title: 'New wallet', description: 'Create new EIP-4337 wallet with Gnosis Safe.', link: ROUTE.SAFE }],
+    "SAFE": [{ title: "New wallet", description: "Create new EIP-4337 wallet with Gnosis Safe.", link: ROUTE.SAFE }],
     "Transactions": [
-      { title: 'Send transaction', description: '', link: ROUTE.TX_SEND },
-      { title: 'Transaction history', description: '', link: ROUTE.TX_HISTORY },
+      { title: "Send transaction", description: "", link: ROUTE.TX_SEND },
+      { title: "Transaction history", description: "", link: ROUTE.TX_HISTORY },
     ],
   }
 
@@ -23,11 +24,12 @@ export const Navigation: React.FC = () => {
       id='Navigation'
       className='fixed top-0 h-28 w-full'
       style={{
-        background: 'rgba(0, 0, 0, 0.17)',
-        backdropFilter: 'blur(5px)',
+        background: "rgba(0, 0, 0, 0.17)",
+        backdropFilter: "blur(5px)",
       }}
     >
       <div className='relative z-20 flex h-28 w-full items-center justify-between px-6'>
+
         <Link id='Logo' className='group relative z-20 order-1 size-10 cursor-pointer' href='/'>
           <Image
             className='absolute scale-125 transition-opacity duration-500 group-hover:opacity-0'
@@ -44,21 +46,64 @@ export const Navigation: React.FC = () => {
             width={40}
           />
         </Link>
-        <div
-          id='ConnectButton'
-          className='relative z-10 order-3 flex h-16 w-60 cursor-pointer items-center justify-between gap-6 rounded-md border border-stone-400 bg-transparent px-4 py-8 transition-colors duration-500 hover:bg-stone-700'
-        >
-          <span className='text-base font-normal uppercase text-stone-300 line-through'>CONNECT WALLET</span>
-          <span className='flex h-6 min-h-6 w-6 min-w-6 items-center justify-center'>
-            <ArrowIcon />
-          </span>
-        </div>
+
+        <ConnectButton.Custom>
+          {({
+            account,
+            chain,
+            openAccountModal,
+            openChainModal,
+            openConnectModal,
+            mounted,
+          }) => {
+            const ready = mounted && account && chain
+            const connected = ready && account && chain
+
+            const handles = !connected ? {
+              onClick: openConnectModal, label: "Connect Wallet",
+            } : chain?.unsupported ? {
+              onClick: openChainModal, label: "Wrong network",
+            } : undefined
+
+            return (
+              handles ? (
+                <button
+                  id='ConnectButton'
+                  className='relative z-10 order-3 flex h-16 w-60 cursor-pointer items-center justify-between gap-6 rounded-md border border-stone-400 bg-transparent px-4 py-8 transition-colors duration-500 hover:bg-stone-700'
+                  onClick={handles.onClick}
+                >
+                  <span className='text-base font-normal uppercase text-stone-300 line-through'>
+                    {handles.label}
+                  </span>
+                  <span className='flex h-6 min-h-6 w-6 min-w-6 items-center justify-center'>
+                    <ArrowIcon />
+                  </span>
+                </button>
+              ) : (
+                  <div className='order-3 flex gap-3'>
+                  <button
+                    onClick={openChainModal}
+                  >
+                    {chain!.name}
+                  </button>
+                  <button
+                    onClick={openAccountModal}
+                  >
+                    {account!.displayName}
+                  </button>
+                </div>
+              )
+            )
+          }}
+        </ConnectButton.Custom>
+
         <div id='NavMenu' className='relative order-2 flex items-center gap-[8px]'>
           {Object.entries(navigation).map(([title, options]) => (
-            <SubMenuButton key={`${title}`} selected={options.some(({link})=> link === router.pathname)} title={title} subMenuOptions={options} />
+            <SubMenuButton key={`${title}`} selected={options.some(({ link }) => link === router.pathname)} title={title} subMenuOptions={options} />
           ))}
           {/* <MenuButton title='Sign Out'/> */}
         </div>
+
       </div>
     </nav>
   )
@@ -88,22 +133,23 @@ const SubMenuButton: React.FC<SubMenuButtonProps> = ({ selected, title, subMenuO
   const router = useRouter()
 
   return (
-  <button id='MenuButton' className='group' >
-    <div
-      className='flex h-[48px] w-[128px] cursor-pointer items-center justify-center rounded-sm text-base font-extralight transition-colors duration-500 hover:!bg-stone-700 group-hover:bg-stone-900 selected:bg-stone-700'
-      data-selected={selected}
-    >
-      {title}
-    </div>
-    <div id='ChildMenuContainer' className='absolute left-0 hidden w-full min-w-80 pt-4 group-hover:block group-focus:block'>
-      <div className='rounded-md border border-stone-700 bg-stone-900 shadow-lg'>
-        {subMenuOptions.map((props) => (
-          <ChildMenu key={`${props.title}`} selected={props.link === router.pathname} {...props} />
-        ))}
+    <button id='MenuButton' className='group' >
+      <div
+        className='flex h-[48px] w-[128px] cursor-pointer items-center justify-center rounded-sm text-base font-extralight transition-colors duration-500 hover:!bg-stone-700 group-hover:bg-stone-900 selected:bg-stone-700'
+        data-selected={selected}
+      >
+        {title}
       </div>
-    </div>
-  </button>
-)}
+      <div id='ChildMenuContainer' className='absolute left-0 hidden w-full min-w-80 pt-4 group-hover:block group-focus:block'>
+        <div className='rounded-md border border-stone-700 bg-stone-900 shadow-lg'>
+          {subMenuOptions.map((props) => (
+            <ChildMenu key={`${props.title}`} selected={props.link === router.pathname} {...props} />
+          ))}
+        </div>
+      </div>
+    </button>
+  )
+}
 
 interface ChildMenuProps {
   selected?: boolean

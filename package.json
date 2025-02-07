@@ -20,6 +20,7 @@
     "types:watch": "tsc --noEmit --incremental --watch"
   },
   "dependencies": {
+    "@rainbow-me/rainbowkit": "^2.2.3",
     "@tanstack/react-query": "^5.66.0",
     "next": "14.2.7",
     "react": "^18",
