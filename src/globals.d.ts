@@ -28,6 +28,7 @@ To contribute ambient declarations from any file, even non-ambient ones, use thi
 
 type AnyObject<T = any> = Record<string, T>
 type Numberish = number | `${number}`
+type Address = `0x${string}`
 
 type Modify<T, R extends PartialAny<T>> = Omit<T, keyof R> & R
 
