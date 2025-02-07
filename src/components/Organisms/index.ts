@@ -1,2 +1,2 @@
-export { Cursors } from './Cursors'
+export { Cursor } from './Cursor'
 export { Navigation } from './Navigation'

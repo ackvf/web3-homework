@@ -75,8 +75,33 @@ const Pointer: React.FC<CursorProps> = ({ className, forwardRef, ...props }) => 
   </svg>
 )
 
+const Text: React.FC<CursorProps> = ({ className, forwardRef, ...props }) => (
+  <svg
+    id='TextCursor'
+    className={twMerge('fill-white', className)}
+    xmlns='http://www.w3.org/2000/svg'
+    xmlnsXlink='http://www.w3.org/1999/xlink'
+    version='1.1'
+    viewBox='6 -8 24 32'
+    xmlSpace='preserve'
+    ref={forwardRef}
+    {...props}
+    data-attribution='Created by icon 54 from the Noun Project'
+  >
+    <g>
+      <g>
+        <path d='M11,24H9c-0.276,0-0.5-0.224-0.5-0.5S8.724,23,9,23h2c0.276,0,0.5-0.224,0.5-0.5v-21C11.5,1.224,11.276,1,11,1H9    C8.724,1,8.5,0.776,8.5,0.5S8.724,0,9,0h2c0.827,0,1.5,0.673,1.5,1.5v21C12.5,23.327,11.827,24,11,24z' />
+      </g>
+      <g>
+        <path d='M15,24h-2c-0.827,0-1.5-0.673-1.5-1.5v-21C11.5,0.673,12.173,0,13,0h2c0.276,0,0.5,0.224,0.5,0.5S15.276,1,15,1h-2    c-0.276,0-0.5,0.224-0.5,0.5v21c0,0.276,0.224,0.5,0.5,0.5h2c0.276,0,0.5,0.224,0.5,0.5S15.276,24,15,24z' />
+      </g>
+    </g>
+  </svg>
+)
+
 export const cursor = {
-  Hand: Hand,
-  HandClick: HandClick,
-  Pointer: Pointer,
+  Hand,
+  HandClick,
+  Pointer,
+  Text,
 }

@@ -11,13 +11,13 @@ import { cursor } from "@/components"
  * TODO: disable on mobile
  */
 
-export const Cursors: React.FC = () => {
+export const Cursor: React.FC = () => {
 	const cursorsContainer = useRef<HTMLDivElement>(null)
 
-	/* Position the container on "mousemove" event. */
+  /* Position the container on "mousemove" event. */
 
 	useEffect(() => {
-		let activeCursor: 0 | 1 | 2 = 0
+		let activeCursor: 0 | 1 | 2 | 3 = 0
 
 		const listener = (event: MouseEvent) => {
 			const { x, y } = { x: event.clientX, y: event.clientY }
@@ -26,6 +26,7 @@ export const Cursors: React.FC = () => {
 
 			if (path.some((item) => (item as HTMLElement).classList?.contains("cursor-pointer"))) activeCursor = 1
 			else if (path.some((item) => (item as HTMLElement).classList?.contains("cursor-click"))) activeCursor = 2
+			else if (path.some((item) => (item as HTMLElement).classList?.contains("cursor-text"))) activeCursor = 3
 			else activeCursor = 0
 
 			if (cursorsContainer.current) {
@@ -56,10 +57,11 @@ export const Cursors: React.FC = () => {
 	}, [])
 
 	return (
-		<div id='Cursors' ref={cursorsContainer} data-cursor='' className='group pointer-events-none fixed'>
-			<cursor.Pointer className='pointer-events-none absolute hidden size-5 group-data-[cursor=0]:block' />
-			<cursor.Hand className='pointer-events-none absolute -left-1.5 -top-2 hidden size-7 -rotate-90 group-data-[cursor=1]:block' />
-			<cursor.HandClick className='pointer-events-none absolute -left-1.5 -top-2 hidden size-7 -rotate-90 group-data-[cursor=2]:block' />
+		<div id="Cursors" ref={cursorsContainer} data-cursor="" className="group pointer-events-none fixed z-[9999]">
+			<cursor.Pointer className="pointer-events-none absolute hidden size-5 group-data-[cursor=0]:block" />
+			<cursor.Hand className="pointer-events-none absolute -left-1.5 -top-2 hidden size-7 -rotate-90 group-data-[cursor=1]:block" />
+			<cursor.HandClick className="pointer-events-none absolute -left-1.5 -top-2 hidden size-7 -rotate-90 group-data-[cursor=2]:block" />
+			<cursor.Text id="cursorText" className="pointer-events-none absolute -left-1.5 -top-2 hidden size-7 group-data-[cursor=3]:block" />
 		</div>
 	)
 }

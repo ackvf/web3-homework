@@ -27,6 +27,8 @@ yarn-error.log*
 
 # any local files
 *.local.*
+# only for the extension to work
+/uno.config.ts
 
 # local env files
 .env*.local
