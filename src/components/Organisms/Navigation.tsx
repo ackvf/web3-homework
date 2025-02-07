@@ -72,7 +72,7 @@ export const Navigation: React.FC = () => {
                   className='relative z-10 order-3 flex h-16 w-60 cursor-pointer items-center justify-between gap-6 rounded-md border border-stone-400 bg-transparent px-4 py-8 transition-colors duration-500 hover:bg-stone-700'
                   onClick={handles.onClick}
                 >
-                  <span className='text-base font-normal uppercase text-stone-300 line-through'>
+                  <span className='text-base font-normal uppercase text-stone-300'>
                     {handles.label}
                   </span>
                   <span className='flex h-6 min-h-6 w-6 min-w-6 items-center justify-center'>

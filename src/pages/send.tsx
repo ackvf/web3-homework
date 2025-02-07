@@ -44,7 +44,7 @@ export default function Send() {
 
   return (
     <main id='MainContentWrap' className='flex-grow pt-8'>
-      <Block id='SignUpForm' >
+      <Block id='SignUpForm' borderStyle='gradient' >
         <div className='light:text-light-500 md:leading-2xl text-stone-500 md:text-2xl'>
           Enter transaction details
         </div>
