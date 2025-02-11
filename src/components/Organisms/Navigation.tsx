@@ -12,10 +12,13 @@ export const Navigation: React.FC = () => {
   const router = useRouter()
 
   const navigation = {
-    "SAFE": [{ title: "New wallet", description: "Create new EIP-4337 wallet with Gnosis Safe.", link: ROUTE.SAFE }],
-    "Transactions": [
-      { title: "Send transaction", description: "", link: ROUTE.TX_SEND },
-      { title: "Transaction history", description: "", link: ROUTE.TX_HISTORY },
+    "Tokens": [
+      { title: "View tokens", description: "View owned ERC20 tokens", link: ROUTE.TOKENS },
+      { title: "Send tokens", description: "Send ERC20 tokens", link: ROUTE.SEND },
+    ],
+    "NFTs": [
+      { title: "View NFTs", description: "View owned ERC721 & ERC1155 NFTs", link: ROUTE.NFTS },
+      { title: "Send NFTs", description: "Send ERC721 & ERC1155 NFTs", link: ROUTE.SEND_NFTS },
     ],
   }
 
