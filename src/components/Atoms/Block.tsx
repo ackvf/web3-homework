@@ -40,15 +40,15 @@ export const Block: React.FC<React.PropsWithChildren<BlockProps>> = ({
 			className={twMerge(className, className_)}
 			onClick={onClick}
 			tabIndex={onClick ? 0 : undefined}
-			ref={el => {
+			ref={(el) => {
 				clearInterval(interval.current)
 				if (el && borderStyle === "gradient") {
 					let r = 90
 					const { offsetWidth: width, offsetHeight: height } = el
 					interval.current = setInterval(() => {
 						const rad = (r++ * Math.PI) / 180
-						const x = width / 2 * Math.cos(rad)
-						const y = height / 2 * Math.sin(rad)
+						const x = (width / 2) * Math.cos(rad)
+						const y = (height / 2) * Math.sin(rad)
 						el.style.setProperty("--block-bg-x", `${x}px`)
 						el.style.setProperty("--block-bg-y", `${y}px`)
 					}, 40)
