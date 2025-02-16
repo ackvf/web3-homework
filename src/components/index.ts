@@ -34,8 +34,8 @@
  *    *note: These Pages are conceptually different from route-pages as their use is primarily for storybook presentation.*
  */
 
-export * from './Atoms'
-export * from './Molecules'
-export * from './Organisms'
-export * from './Templates'
-export * from './Pages'
+export * from "./Atoms"
+export * from "./Molecules"
+export * from "./Organisms"
+export * from "./Templates"
+export * from "./Pages"

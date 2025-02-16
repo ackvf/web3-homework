@@ -7,23 +7,23 @@ More info here: https://stackoverflow.com/a/73389225/985454
 Don't use `import` and `export` in this file directly! It breaks ambience.
 To import external types in an ambient declarations file (this file) use the following:
 
-*//**
-* @example
-* declare type React = import('react')
-*//*
+*/ /**
+ * @example
+ * declare type React = import('react')
+ */ /*
 
 To contribute ambient declarations from any file, even non-ambient ones, use this:
 
-*//**
-* @example
-* declare global {
-*   interface Window {
-*     ethereum: any
-*   }
-* }
-*//*
+*/ /**
+ * @example
+ * declare global {
+ *   interface Window {
+ *     ethereum: any
+ *   }
+ * }
+ */ /*
 
-/*//// -----------------------------------------------------------------------------------------------------------------
+/*/ /// -----------------------------------------------------------------------------------------------------------------
 ////// -----------------------------------------------------------------------------------------------------------------
 
 type AnyObject<T = any> = Record<string, T>
@@ -33,7 +33,7 @@ type Address = `0x${string}`
 type Modify<T, R extends PartialAny<T>> = Omit<T, keyof R> & R
 
 type PartialAny<T> = {
-	[P in keyof T]?: any
+  [P in keyof T]?: any
 }
 
 /**
@@ -54,4 +54,6 @@ type PartialAny<T> = {
  *  onChange={(value: string) => ...} // type (value: string) => void is not assignable to (ev: EventStub) => void
  * />
  */
-type FormInput<C extends React.FC<any>> = <FormState extends AnyObject = { ___: true }>(...params: FormState extends { ___: true } ? Parameters<C> : [Parameters<C>[0] & { name: keyof FormState }]) => ReturnType<C>
+type FormInput<C extends React.FC<any>> = <FormState extends AnyObject = { ___: true }>(
+  ...params: FormState extends { ___: true } ? Parameters<C> : [Parameters<C>[0] & { name: keyof FormState }]
+) => ReturnType<C>

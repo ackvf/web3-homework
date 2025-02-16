@@ -16,7 +16,6 @@ const inter = Inter({ subsets: ["latin"] })
 const queryClient = new QueryClient()
 
 export default function App({ Component, pageProps }: AppProps) {
-
   useLayoutEffect(() => {
     // Random background on page load
     document.getElementById("RootElement")?.classList.add("bg" + (((Math.random() * 7) | 0) + 1))
@@ -26,19 +25,18 @@ export default function App({ Component, pageProps }: AppProps) {
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <RainbowKitProvider>
-      <Cursor />
-      <main id="RootElement" className={`${inter.className} flex h-screen flex-col pt-28`}>
-        <Head>
-          <title>Wallet by Qwerty</title>
-          <meta name="description" content="Wallet by Qwerty." />
-          <link rel="icon" href="/favicon.png" />
-        </Head>
-        <Navigation />
-        <Component {...pageProps} />
-        </main >
+          <Cursor />
+          <main id="RootElement" className={`${inter.className} flex h-screen flex-col pt-28`}>
+            <Head>
+              <title>Wallet by Qwerty</title>
+              <meta name="description" content="Wallet by Qwerty." />
+              <link rel="icon" href="/favicon.png" />
+            </Head>
+            <Navigation />
+            <Component {...pageProps} />
+          </main>
         </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>
   )
-
 }

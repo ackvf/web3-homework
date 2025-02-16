@@ -17,6 +17,7 @@
 /build
 
 # misc
+.git-worktrees/
 .DS_Store
 *.pem
 
