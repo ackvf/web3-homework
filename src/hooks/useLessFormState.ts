@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useReducer, useRef } from 'react'
-import type { ChangeEventHandler, Reducer } from 'react'
+import { useEffect, useMemo, useReducer, useRef } from "react"
+import type { ChangeEventHandler, Reducer } from "react"
 
 /**
  * # Use less form state
@@ -57,7 +57,7 @@ export function useLessFormState<S extends AnyObject = AnyObject>(
       /** Toggle handler that accepts an input Event. `name` property must be specified on the input. */
       onToggle: ChangeEventHandler<HTMLInputElement>
       /** Toggle handler that accepts Event.target stub. `name` property must be specified on the input. */
-      onToggleValue: (eventTarget: Pick<TargetStub<S>, 'name'>) => void
+      onToggleValue: (eventTarget: Pick<TargetStub<S>, "name">) => void
       /** Universal handler that accepts Partial state objects. */
       onObjectChange: (partialState: Partial<S>) => void
     },
@@ -84,7 +84,7 @@ export function useLessFormState<S extends AnyObject = AnyObject>(
 
   const [state, setField] = useReducer<Reducer<S, TargetStub<S> | Updater<S>>>(
     (prevState, action) => {
-      const pending = typeof action === 'function' ? action(prevState) : { [action.name]: action.value }
+      const pending = typeof action === "function" ? action(prevState) : { [action.name]: action.value }
       const newState = { ...prevState, ...pending }
 
       if (callbacks?.onChange) {

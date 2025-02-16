@@ -36,7 +36,7 @@ body {
 }
 
 #RootElement::before {
-  content: '';
+  content: "";
   position: fixed;
   top: 0;
   left: 0;
@@ -53,27 +53,27 @@ body {
 }
 
 #RootElement.bg1::before {
-  background-image: url('/bg/413-1600x1000.jpg');
+  background-image: url("/bg/413-1600x1000.jpg");
 }
 #RootElement.bg2::before {
-  background-image: url('/bg/552-1600x1000.jpg');
+  background-image: url("/bg/552-1600x1000.jpg");
   opacity: 0.6;
 }
 #RootElement.bg3::before {
-  background-image: url('/bg/567-1600x1000.jpg');
+  background-image: url("/bg/567-1600x1000.jpg");
 }
 #RootElement.bg4::before {
-  background-image: url('/bg/880-1000x1600.jpg');
+  background-image: url("/bg/880-1000x1600.jpg");
 }
 #RootElement.bg5::before {
-  background-image: url('/bg/944-1600x1600.jpg');
+  background-image: url("/bg/944-1600x1600.jpg");
 }
 #RootElement.bg6::before {
-  background-image: url('/bg/991-1600x1000.jpg');
+  background-image: url("/bg/991-1600x1000.jpg");
   opacity: 0.5;
 }
 #RootElement.bg7::before {
-  background-image: url('/bg/1079-1600x1000.jpg');
+  background-image: url("/bg/1079-1600x1000.jpg");
 }
 
 @layer utilities {
