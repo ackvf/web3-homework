@@ -1,2 +1,7 @@
 # files with special formatting
-src/hooks/useCursor.tsx
+Cursor.tsx
+src/hooks/useCursor.ts
+src/hooks/useLessFormErrors.ts
+src/hooks/useLessFormState.ts
+src/hooks/useShallowState.ts
+src/globals.d.ts

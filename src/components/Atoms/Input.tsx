@@ -50,7 +50,7 @@ export const Input: FormInput<React.FC<InputProps | TextareaProps | NumberInputP
 				"w-full flex gap-4",
 				!readOnly && getBorderStyles(!isTextArea ? "input" : "textarea"),
 				!readOnly &&
-				"hover:border-stone-400 focus-within:border-stone-500 border-stone-600 disabled:border-stone-800:disabled",
+					"hover:border-stone-400 focus-within:border-stone-500 border-stone-600 disabled:border-stone-800:disabled",
 			),
 		[readOnly, isTextArea],
 	)

@@ -1,4 +1,4 @@
-import { useMemo, useReducer, useRef } from 'react'
+import { useMemo, useReducer, useRef } from "react"
 
 /**
  * @author Qwerty <qwerty@qwerty.xyz>
@@ -50,7 +50,7 @@ export default function useShallowState<S extends AnyObject = AnyObject>(
 	] {
 
 	const [state, setState] = useReducer(
-		(prevState, action = {}) => ({ ...prevState, ...(typeof action === 'function' ? action(prevState) : action) }),
+		(prevState, action = {}) => ({ ...prevState, ...(typeof action === "function" ? action(prevState) : action) }),
 		initialState,
 	) as [S, SetState<S>]
 

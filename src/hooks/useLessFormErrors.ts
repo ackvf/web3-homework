@@ -17,17 +17,17 @@ const c = <C extends string>(chars: C): TypedRegExp<C> => new RegExp(`^[${chars}
 /* Note: Special characters must be double escaped! https://262.ecma-international.org/5.1/#sec-7.8.4 */
 
 /* Character sets */
-const TEXT = `a-zA-Z`
-const ALNUM = `a-zA-Z0-9`
-const NUMBER = `0-9`
-const SPECIAL_CHARACTERS = `_.,:;~+-=*""^°\`<>(){}[\\\]!?$@&#%|\\\\/`
+const TEXT = "a-zA-Z"
+const ALNUM = "a-zA-Z0-9"
+const NUMBER = "0-9"
+const SPECIAL_CHARACTERS = "_.,:;~+-=*\"\"^°`<>(){}[\\\]!?$@&#%|\\\\/"
 const SPECIAL_TEXTAREA_CHARACTERS = `${SPECIAL_CHARACTERS}\n\t•◦‣∙` as const
 
 /* Regexes */
 const DECIMAL_TEMPLATE = (decimals?: number) => `^\\d*(\\.\\d${(decimals === undefined) ? "*" as const : `{0,${decimals}}` as const})?$` as const
 const ADDRESS = "^0x[a-fA-F0-9]{40}$"
 const UUID = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
-const URL = `^https?://[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}(:[0-9]{1,5})?(/.*)?$`
+const URL = "^https?://[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}(:[0-9]{1,5})?(/.*)?$"
 
 // Validation rules & messages -----------------------------------------------------------------------------------------
 

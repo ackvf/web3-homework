@@ -1,71 +1,62 @@
 module.exports = {
-  root: true,
-  extends: ['next', 'next/core-web-vitals', 'prettier'],
-  plugins: ['@typescript-eslint'],
-  settings: {
-    next: {
-      rootDir: '.',
-    },
-  },
-  parserOptions: {
-    project: ['tsconfig.json'],
-  },
-  ignorePatterns: ['.eslintrc.js'],
-  rules: {
-    'comma-dangle': ['error', 'always-multiline'],
-    'no-shadow': 'warn',
-    '@typescript-eslint/no-shadow': 'warn',
-    'react/no-children-prop': 'warn',
-    semi: ['error', 'never'],
-    '@typescript-eslint/consistent-type-imports': [
-      'warn',
-      {
-        prefer: 'type-imports',
-        fixStyle: 'inline-type-imports',
-        disallowTypeAnnotations: false,
-      },
-    ],
-    'import/order': [
-      'warn',
-      {
-        alphabetize: {
-          order: 'asc',
-          caseInsensitive: true,
-        },
-        'newlines-between': 'always',
-        distinctGroup: false,
-        groups: ['builtin', 'external', 'internal', ['parent', 'sibling', 'index']],
-        pathGroupsExcludedImportTypes: [],
-        pathGroups: [
-          {
-            pattern: 'react',
-            group: 'external',
-            position: 'before',
-          },
-          {
-            pattern: '{@/ui,@/ui/**,@/components,@/components/**}',
-            group: 'internal',
-            position: 'after',
-          },
-          {
-            pattern: '@/**',
-            group: 'internal',
-          },
-          {
-            pattern: '../**',
-            group: 'parent',
-            position: 'before',
-          },
-          {
-            pattern: '{./,.}',
-            group: 'index',
-            position: 'after',
-          },
-        ],
-      },
-    ],
-    quotes: ['warn', 'double', { avoidEscape: true }],
-    'react-hooks/exhaustive-deps': 'error',
-    'react/no-unescaped-entities': 'off',
-  },
+	root: true,
+	extends: ["next", "next/core-web-vitals", "prettier"],
+	plugins: ["@typescript-eslint"],
+	settings: {
+		next: {
+			rootDir: ".",
+		},
+	},
+	parserOptions: {
+		project: ["tsconfig.json"],
+	},
+	ignorePatterns: [".eslintrc.js"],
+	rules: {
+		"@typescript-eslint/consistent-type-imports": ["warn", {
+			disallowTypeAnnotations: false,
+			fixStyle: "inline-type-imports",
+			prefer: "type-imports"
+		}],
+		"@typescript-eslint/no-shadow": "warn",
+		"comma-dangle": ["error", "always-multiline"],
+		"import/order": ["warn", {
+			alphabetize: {
+				caseInsensitive: true,
+				order: "asc"
+			},
+			distinctGroup: false,
+			groups: ["builtin", "external", "internal", ["parent", "sibling", "index"]],
+			"newlines-between": "always",
+			pathGroups: [{
+				group: "external",
+				pattern: "react",
+				position: "before"
+			}, {
+				group: "internal",
+				pattern: "{@/ui,@/ui/**,@/components,@/components/**}",
+				position: "after"
+			}, {
+				group: "internal",
+				pattern: "@/**"
+			}, {
+				group: "parent",
+				pattern: "../**",
+				position: "before"
+			}, {
+				group: "index",
+				pattern: "{./,.}",
+				position: "after"
+			}],
+			pathGroupsExcludedImportTypes: []
+		}],
+		"indent": ["error", "tab", { SwitchCase: 1 }],
+		"no-shadow": "warn",
+		"quotes": ["warn", "double", {
+			avoidEscape: true
+		}],
+		"react-hooks/exhaustive-deps": "error",
+		"react/no-children-prop": "warn",
+		"react/no-unescaped-entities": "off",
+		"semi": ["error", "never"]
+	},
 }
