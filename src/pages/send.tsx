@@ -1,6 +1,4 @@
 import { useCallback } from "react"
-import { parseEther } from "viem"
-import { useSendTransaction, useWaitForTransactionReceipt } from "wagmi"
 
 import { useLessFormErrors, useLessFormState } from "@/hooks"
 import { validations, type RuleSet } from "@/hooks/useLessFormErrors"
@@ -19,10 +17,6 @@ const validationRules: RuleSet<FormState> = {
 const initialState = { address: "" as Address, amount: "" } as FormState
 
 export default function Send() {
-	const { data: hash, sendTransaction, isPending } = useSendTransaction()
-	const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
-		hash,
-	})
 
 	const [formErrors, { checkFieldErrorsOnFormStateChange }] = useLessFormErrors<FormState>(validationRules)
 	const [formState, { onInputChange }, , refState] = useLessFormState<FormState>(initialState, undefined, {
@@ -35,9 +29,8 @@ export default function Send() {
 			console.log(refState.current) // formState is old state, refState.current is ALWAYS latest state.
 			const to = refState.current.address
 			const value = refState.current.amount
-			sendTransaction({ to, value: parseEther(value) })
 		},
-		[refState, sendTransaction],
+		[refState],
 	)
 
 	return (
@@ -64,17 +57,15 @@ export default function Send() {
 					{formErrors.amount && <div className="text-red-500">{formErrors.amount}</div>}
 					<div className="flex flex-col gap-4 md:flex-row md:gap-8">
 						<button
-							disabled={isPending}
+							disabled={false}
 							type="submit"
 							className="mx-auto block h-14 w-60 cursor-pointer justify-center rounded-md border border-stone-600 bg-stone-200 px-4 text-stone-900 transition-colors duration-500 hover:bg-stone-400"
 						>
-							<span className="text-base font-normal uppercase">{isPending ? "Confirming..." : "Send"}</span>
+							<span className="text-base font-normal uppercase">{"Send"}</span>
 						</button>
 						{/* <Button disabled={isLocked || !isFormValid} loading={isLocked} label='Save' type='submit' fullWidth /> */}
 					</div>
-					{hash && <div>Transaction Hash: {hash}</div>}
-					{isConfirming && <div>Waiting for confirmation...</div>}
-					{isConfirmed && <div>Transaction confirmed.</div>}
+					<div>Transaction confirmed.</div>
 				</form>
 			</Block>
 		</main>

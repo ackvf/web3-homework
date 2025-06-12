@@ -1,5 +1,4 @@
 import React from "react"
-import { ConnectButton } from "@rainbow-me/rainbowkit"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/router"
@@ -46,42 +45,7 @@ export const Navigation: React.FC = () => {
 					/>
 				</Link>
 
-				<ConnectButton.Custom>
-					{({ account, chain, openAccountModal, openChainModal, openConnectModal, mounted }) => {
-						const ready = mounted && account && chain
-						const connected = ready && account && chain
-
-						const handles = !connected
-							? {
-									onClick: openConnectModal,
-									label: "Connect Wallet",
-								}
-							: chain?.unsupported
-								? {
-										onClick: openChainModal,
-										label: "Wrong network",
-									}
-								: undefined
-
-						return handles ? (
-							<button
-								id="ConnectButton"
-								className="relative z-10 order-3 flex h-16 w-60 cursor-pointer items-center justify-between gap-6 rounded-md border border-stone-400 bg-transparent px-4 py-8 transition-colors duration-500 hover:bg-stone-700"
-								onClick={handles.onClick}
-							>
-								<span className="text-base font-normal uppercase text-stone-300">{handles.label}</span>
-								<span className="flex h-6 min-h-6 w-6 min-w-6 items-center justify-center">
-									<ArrowIcon />
-								</span>
-							</button>
-						) : (
-							<div className="order-3 flex gap-3">
-								<button onClick={openChainModal}>{chain!.name}</button>
-								<button onClick={openAccountModal}>{account!.displayName}</button>
-							</div>
-						)
-					}}
-				</ConnectButton.Custom>
+				<ConnectButton />
 
 				<div id="NavMenu" className="relative order-2 flex items-center gap-[8px]">
 					{Object.entries(navigation).map(([title, options]) => (
@@ -172,3 +136,35 @@ const ChildMenu: React.FC<ChildMenuProps> = ({ selected, title, description, lin
 		</div>
 	</Link>
 )
+
+function ConnectButton() {
+	const state = false
+
+	const handles = state
+		? {
+			onClick: () => { },
+			label: "Stop",
+		}
+		: {
+			onClick: () => { },
+			label: "Start",
+		}
+
+	return handles ? (
+		<button
+			id="ConnectButton"
+			className="relative z-10 order-3 flex h-16 w-60 cursor-pointer items-center justify-between gap-6 rounded-md border border-stone-400 bg-transparent px-4 py-8 transition-colors duration-500 hover:bg-stone-700"
+			onClick={handles.onClick}
+		>
+			<span className="text-base font-normal uppercase text-stone-300">{handles.label}</span>
+			<span className="flex h-6 min-h-6 w-6 min-w-6 items-center justify-center">
+				<ArrowIcon />
+			</span>
+		</button>
+	) : (
+		<div className="order-3 flex gap-3">
+			<button onClick={() => { }}>A</button>
+			<button onClick={() => { }}>name</button>
+		</div>
+	)
+}
