@@ -1,22 +1,24 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/router"
 
-import { ROUTE } from "@/routes"
+import { ws, type ServerMessage, type ServerTimeStampMessage } from "@/client"
+import { useAppState } from "@/context/AppState"
+import useToggle from "@/hooks/useToggle"
 
-import { ArrowIcon } from "../Atoms"
+import { Block, WsConnected, WsPlug, WsSocket } from "../Atoms"
 
 export const Navigation: React.FC = () => {
 	const router = useRouter()
 
-	const navigation = {
-		SAFE: [{ title: "New wallet", description: "Create new EIP-4337 wallet with Gnosis Safe.", link: ROUTE.SAFE }],
-		Transactions: [
-			{ title: "Send transaction", description: "", link: ROUTE.TX_SEND },
-			{ title: "Transaction history", description: "", link: ROUTE.TX_HISTORY },
-		],
-	}
+	// const navigation = {
+	// 	SAFE: [{ title: "New wallet", description: "Create new EIP-4337 wallet with Gnosis Safe.", link: ROUTE.SAFE }],
+	// 	Transactions: [
+	// 		{ title: "Send transaction", description: "", link: ROUTE.TX_SEND },
+	// 		{ title: "Transaction history", description: "", link: ROUTE.TX_HISTORY },
+	// 	],
+	// }
 
 	return (
 		<nav
@@ -47,17 +49,19 @@ export const Navigation: React.FC = () => {
 
 				<ConnectButton />
 
-				<div id="NavMenu" className="relative order-2 flex items-center gap-[8px]">
-					{Object.entries(navigation).map(([title, options]) => (
-						<SubMenuButton
-							key={`${title}`}
-							selected={options.some(({ link }) => link === router.pathname)}
-							title={title}
-							subMenuOptions={options}
-						/>
-					))}
-					{/* <MenuButton title='Sign Out'/> */}
-				</div>
+				{
+					// <div id="NavMenu" className="relative order-2 flex items-center gap-[8px]">
+					// 	{Object.entries(navigation).map(([title, options]) => (
+					// 		<SubMenuButton
+					// 			key={`${title}`}
+					// 			selected={options.some(({ link }) => link === router.pathname)}
+					// 			title={title}
+					// 			subMenuOptions={options}
+					// 		/>
+					// 	))}
+					// 	{/* <MenuButton title='Sign Out'/> */}
+					// </div>
+				}
 			</div>
 		</nav>
 	)
@@ -66,14 +70,15 @@ export const Navigation: React.FC = () => {
 interface MenuButtonProps {
 	selected?: boolean
 	title: string
+	onClick?: () => void
+	className?: string
 }
 
-const MenuButton: React.FC<MenuButtonProps> = ({ selected, title }) => (
+const MenuButton: React.FC<MenuButtonProps> = ({ selected, title, onClick, className }) => (
 	<button
 		id="MenuButton"
-		onClick={() => {
-			alert("clicked")
-		}}
+		onClick={onClick}
+		className={className}
 	>
 		<div
 			className="cursor-click flex h-[48px] w-[128px] items-center justify-center rounded-sm text-base font-extralight transition-colors duration-100 hover:!bg-stone-700 group-hover:bg-stone-900 selected:bg-stone-700"
@@ -138,33 +143,119 @@ const ChildMenu: React.FC<ChildMenuProps> = ({ selected, title, description, lin
 )
 
 function ConnectButton() {
-	const state = false
+	const { appState, setState } = useAppState()
+	const [wsConnected, , wsOn, wsOff] = useToggle()
+	const [wsStarted, , on, off, , refStarted] = useToggle()
 
-	const handles = state
+	// TODO Instead of setting state directly, use websocket Info events (Started / Stopped) to update the state.
+
+	useEffect(() => {
+		setState({ wsConnected })
+		if (!wsConnected && wsStarted) off()
+		if (wsConnected) ws.connect()
+		return () => ws.close()
+	}, [wsConnected]) // eslint-disable-line react-hooks/exhaustive-deps
+
+	useEffect(() => {
+		setState({ wsStarted })
+		if (wsStarted) ws.sendCommand("start")
+		return () => { !refStarted.current && ws.sendCommand("stop") } // eslint-disable-line react-hooks/exhaustive-deps
+	}, [wsStarted]) // eslint-disable-line react-hooks/exhaustive-deps
+
+	const handles = wsConnected
 		? {
-			onClick: () => { },
-			label: "Stop",
+			onClick: wsOff,
+			label: "Odpojit",
+			icon: <WsConnected />,
 		}
 		: {
-			onClick: () => { },
-			label: "Start",
+			onClick: wsOn,
+			label: "Připojit",
+			icon: <span>
+				<span className="block group-hover:hidden relative h-5 w-5">
+					<WsPlug className="absolute -top-1.5 -left-2" />
+					<WsSocket />
+				</span>
+				<WsConnected className="hidden group-hover:block" />
+			</span>,
 		}
 
-	return handles ? (
-		<button
-			id="ConnectButton"
-			className="relative z-10 order-3 flex h-16 w-60 cursor-pointer items-center justify-between gap-6 rounded-md border border-stone-400 bg-transparent px-4 py-8 transition-colors duration-500 hover:bg-stone-700"
-			onClick={handles.onClick}
-		>
-			<span className="text-base font-normal uppercase text-stone-300">{handles.label}</span>
-			<span className="flex h-6 min-h-6 w-6 min-w-6 items-center justify-center">
-				<ArrowIcon />
-			</span>
-		</button>
-	) : (
-		<div className="order-3 flex gap-3">
-			<button onClick={() => { }}>A</button>
-			<button onClick={() => { }}>name</button>
+	return (
+		<div className="flex items-center justify-between gap-4 order-3">
+			<Timmestamp />
+			{
+				appState.wsConnected ? (
+					wsStarted
+						? <MenuButton title="Stop" onClick={off} />
+						: <MenuButton title="Start" onClick={on} />
+
+				) : (
+					<MenuButton title="" className="invisible" />
+				)
+			}
+			{wsConnected ? (
+				<Block
+					borderStyle="gradient"
+					placement="inline"
+					id="ConnectButton"
+					className='group relative flex flex-row z-10 h-16 w-60 px-4 py-8 gap-6
+				cursor-pointer items-center justify-between rounded-md border
+				border-stone-400 bg-transparent transition-colors duration-500
+				[--block-bg-color:theme("colors.stone.700")]
+				[--block-bg-border-color:theme("colors.cyan.600")]
+				'
+					onClick={handles.onClick}
+				>
+					<span className="text-base font-normal uppercase text-stone-300">{handles.label}</span>
+					<span className="flex h-6 min-h-6 w-6 min-w-6 items-center justify-center">
+						{handles.icon}
+					</span>
+				</Block>
+			) : (
+				<button
+					id="ConnectButton"
+					className="group relative flex order-3 z-10 h-16 w-60 px-4 py-8 gap-6
+				cursor-pointer items-center justify-between rounded-md border
+				border-stone-400 bg-transparent transition-colors duration-500 hover:bg-stone-700
+				"
+					onClick={handles.onClick}
+				>
+					<span className="text-base font-normal uppercase text-stone-300">{handles.label}</span>
+					<span className="flex h-6 min-h-6 w-6 min-w-6 items-center justify-center">
+						{handles.icon}
+					</span>
+				</button>
+				// flat buttons
+				// : (
+				// 	<div className="order-3 flex gap-3">
+				// 		<button onClick={() => { }}>A</button>
+				// 		<button onClick={() => { }}>name</button>
+				// 	</div>
+				// )
+			)}
+		</div>)
+}
+
+function Timmestamp() {
+	const [state, setState] = useState("")
+	const { appState: { wsConnected } } = useAppState()
+
+	useEffect(() => {
+		function handler(msg: ServerMessage) {
+			if ((msg as ServerTimeStampMessage).timeStamp !== undefined) setState((msg as ServerTimeStampMessage).timeStamp)
+		}
+		if (wsConnected) ws.onMessage(handler)
+		return () => ws.off(handler)
+	}, [wsConnected]) // eslint-disable-line react-hooks/exhaustive-deps
+
+	return (
+		<div className="text-xs text-stone-400">
+			{wsConnected && state && new Date(state).toLocaleTimeString(undefined, {
+				hour12: false,
+				hour: "2-digit",
+				minute: "2-digit",
+				second: "2-digit",
+			})}
 		</div>
 	)
 }

@@ -46,7 +46,7 @@ export default function useShallowState<S extends AnyObject = AnyObject>(
 			deleteProperty: (property: keyof S) => void
 		},
 		/** Escape hatch to make life easier inside hooks and callbacks ¯\_(ツ)_/¯ */
-		refState: { current: S }
+		refState: { readonly current: S }
 	] {
 
 	const [state, setState] = useReducer(

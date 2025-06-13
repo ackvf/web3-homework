@@ -24,6 +24,14 @@
 	--foreground-rgb: 255, 255, 255;
 	--background-color: 0, 0, 0;
 	--background-opacity: 0.4;
+
+	/* shadcn - https://github.com/shadcn-ui/ui/blob/40c7473c7e5e132cd074b05bf090e2ecd75b8875/apps/v4/public/r/themes.css#L80 */
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 100%;
+  --input: 214.3 31.8% 91.4%;
+  --primary: 222.2 47.4% 11.2%;
+  --primary-foreground: 210 40% 98%;
+  --ring: 222.2 84% 4.9%;
 }
 
 #__next * {

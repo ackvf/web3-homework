@@ -3,7 +3,9 @@ import { twMerge } from "tailwind-merge"
 
 export type BlockProps = {
 	id?: string
-	borderStyle?: "solid" | "gradient"
+	borderStyle?: "solid" | "gradient" | /** for debugging */"visible"
+	placement?: "page" | "inline"
+	radius?: "sm" | "md"
 	className?: string
 	onClick?: React.MouseEventHandler<HTMLDivElement>
 }
@@ -15,10 +17,17 @@ export const Block: React.FC<React.PropsWithChildren<BlockProps>> = ({
 	id = "Block",
 	className: className_ = "",
 	borderStyle = "solid",
+	placement = "page",
+	radius = "md",
 	children,
 	onClick,
 }) => {
-	const className = [classNames.base, "rounded-md", classNames.borderStyle[borderStyle]].join(" ")
+	const className = [
+		classNames.base,
+		classNames.placement[placement],
+		classNames.radius[radius],
+		classNames.borderStyle[borderStyle],
+	].join(" ")
 
 	const interval = useRef<NodeJS.Timeout>(undefined)
 
@@ -38,6 +47,7 @@ export const Block: React.FC<React.PropsWithChildren<BlockProps>> = ({
 				`,
 			} as CSSProperties}
 			className={twMerge(className, className_)}
+			// className={`${className} ${className_}`} TODO
 			onClick={onClick}
 			tabIndex={onClick ? 0 : undefined}
 			ref={(el) => {
@@ -62,17 +72,20 @@ export const Block: React.FC<React.PropsWithChildren<BlockProps>> = ({
 
 const classNames = {
 	base: [
-		"w-[600px] mx-auto",
-		"p-6 md:p-8",
 		"flex flex-col",
 		"border border-stone-600 shadow-lg bg-stone-950",
 		'[--block-bg-color:theme("colors.stone.950")]',
 		'[--block-bg-border-color:theme("colors.stone.600")]',
 	].join(" "),
+	placement: {
+		page: "w-[600px] mx-auto p-6 md:p-8",
+		inline: "",
+	},
 	borderStyle: {
 		solid: "",
 		gradient: "!border-transparent [background:padding-box_var(--block-bg-content),border-box_var(--block-bg-border)]",
-		// gradient: "!border-transparent [background:border-box_var(--block-bg-border)]", // visualize border effect
+		/** Visualize border effect for debugging. */
+		visible: "!border-transparent [background:border-box_var(--block-bg-border)]",
 	},
 	radius: {
 		sm: "rounded-sm",

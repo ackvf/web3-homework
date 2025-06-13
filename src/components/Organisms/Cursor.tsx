@@ -14,7 +14,7 @@ import { cursor } from "@/components"
 export const Cursor: React.FC = () => {
 	const cursorsContainer = useRef<HTMLDivElement>(null)
 
-  /* Position the container on "mousemove" event. */
+	/* Position the container on "mousemove" event. */
 
 	useEffect(() => {
 		let activeCursor: 0 | 1 | 2 | 3 = 0

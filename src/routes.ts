@@ -9,5 +9,3 @@ export const ROUTE = {
 	TX_SEND: "/send",
 	TX_HISTORY: "/history",
 } as const
-
-// TODO Api routes?

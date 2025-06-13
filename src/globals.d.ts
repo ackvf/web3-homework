@@ -27,6 +27,8 @@ To contribute ambient declarations from any file, even non-ambient ones, use thi
 ////// -----------------------------------------------------------------------------------------------------------------
 
 type AnyObject<T = any> = Record<string, T>
+type AnyFunction = (...args: any[]) => any
+
 type Numberish = number | `${number}`
 type Address = `0x${string}`
 
@@ -55,3 +57,20 @@ type PartialAny<T> = {
  * />
  */
 type FormInput<C extends React.FC<any>> = <FormState extends AnyObject = { ___: true }>(...params: FormState extends { ___: true } ? Parameters<C> : [Parameters<C>[0] & { name: keyof FormState }]) => ReturnType<C>
+
+// Window and library interfaces overrides -------------------------------------------------------------------------------------
+
+/** A cross-platform reference to the Window object or another global object (NodeJS). */
+declare module globalThis {
+	/**
+	 * debug/inspect object, put anything here without TypeScript complaining about "Property 'd' does not exist on Window."\
+	 */
+	var d: any
+	/**
+	 * This function will add the object to the `globalThis.d` (i.e. `window.d`) object if `IS_DEV` is true.
+	 *
+	 * @example
+	 * inspect({ useGlobalState: useGlobalStore.getState() })
+	 */
+	var inspect: (object: AnyObject) => void
+}
