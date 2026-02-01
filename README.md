@@ -4,6 +4,7 @@ This repository contains solutions to several home assignments.
 Each resides in its own branch and has its own deployment. See [**main**](https://github.com/ackvf/web3-homework/tree/main) branch's README for all links or their respective READMEs for more relevant information.
 
 - https://homework.qwerty.art/
+- Momence https://momence.qwerty.art/ - https://github.com/ackvf/momence-homework
 - Exodus https://exodus.qwerty.art/
 - Watr https://watr.qwerty.art/
 - Insomnia https://insomnia.qwerty.art/
